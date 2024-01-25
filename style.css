@@ -1,0 +1,44 @@
+body {
+    margin-left: 30%;
+    margin-right: 30%;
+    font-size: 10px;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    opacity: 1;
+   }
+   
+.pg1,.pg2,.pg3,.pg4,.pg5,.pg6,.pg7,.pg8,.pg9,.pg10,.pg11,.pg12,.pg13,.pg14,.pg15,.pg16,.pg17,.pg18,.pg19,.pg20,.pg21,.pg22,.pg23,.pg24,.pg25,.pg26,.pg27,.pg28,.pg29,.pg30,.pg31,.pg32,.pg33,.pg34,.pg35,.pg36,.pg37,.pg38,.pg39,.pg40{
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 20px;
+    background-color: rgb(231, 224, 224);
+    box-shadow: 2px;
+   }
+img{
+width: 100%;
+height: 100%;
+display: flex;
+justify-content: center;
+text-align: center;
+
+
+   }
+.data{
+    margin-top: 10%;
+    margin-bottom: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: justify;
+   }
+   .line{
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    color: hsl(197, 100%, 50%);
+   }
+   .line1{
+      width: 75%;
+      height: 2px;
+      background-color: black;
+      color: aqua;
+     }

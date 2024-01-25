@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="pg1">
+        <div class="data"><br>
+            <p><h2 style="color: blue;">Chapter3.Migrating from Tivoli NetView for OS/390V1R4</h2><br><br>
+                This section describes how to migrate the NetView program to run as a production system if you are migrating from the Tivoli NetView for OS/390®V1R4.The migration information is based on the NetView components included with the initial release of V1R4.Review your maintenance to see if you have already made some of the changes that are described in this chapter.<br><br>
+                You can either add the V6R3 content in to your V1R4 NetView definitions,or add your V1R4 customization to the default V6R3 members supplied with the NetView program. Either way, place the customized member into an appropriate user-allocated data set such as NETVIEW.V6R3USER.CNM01.DSIPARM.<br> DonotcustomizemembersintheSMP/E-manageddatasetssuchasNETVIEW.V6R3M0.DSIPARM.<br><br>
+                Several factors can influence the method you use when migrating your NetViewdefinition members.Factors such as the size and complexity of your network, security policies that must be followed, and established practice swith in your business can all influence what is the best method for your migration.The checklist that follows details the documented method of migration as outlined in this book and supported by other books in the NetView library.Choose the method of migration that is best for you.
+                Perform the following steps to migrate your V1R4 definitions:<br>
+                1.	All ocateanewset of V6R3 user data sets by running sample job CNMSJ002.You needed to have done this when you completed the steps in Table12 on page16.<br>
+                2.	Run the CNMSJMIG sample job to convert statements in various members in your V1R4DSIPARM dataset to the new CNMSTYLE format. See Appendix F, “Migrating to the CNMSTYLE and CNMCMDMembers,”onpage161formoredetails.<br>
+                3.	Run the CNMSJMIG sample job to convert the statements in your V1R4DSICMD member to the newstatement format in the CNMCMD member. See Appendix F, “Migrating to the CNMSTYLE andCNMCMDMembers,”onpage161formoredetails.<br>
+                4.	Define a unique & NV2I value (xx) for each Net View domain.<br>
+                5.	If you ran the CNMSJMIG job, move any domain-specific statements that were created from the CNMSTUSR member in to the CxxSTGEN member,where xx is the value of the local symbolic variable & NV2I that you defined in the previous step.<br>
+                6.	Review your customized V1R4 copy of the CNMSTYLE member. Move all of your domain-specific customization of V1R4CNMSTYLE statements in to the CxxSTGEN member and all of your system-wide customization of V1R4CNMSTYLE statements in to the CNMSTUSR member,noting that some of these changes might have been added by the CNMSJMIG job. Do not copy your V1R4 CNMSTYLE member in to the V6R3 user DSIPARM dataset.<br>
+                7.	Review the CNM STYLE information in this section and the V6R3CNMSTNXT membership ped with the NetView program. Place any domain-specific customization of CNMSTYLE statements into the CxxSTGEN member and any system-wide customization of CNMSTYLE statements in to the CNMSTUSR member.Do not modify the V6R3 default CNMSTYLE member.<br>
+                8.	Review there maining information in this chapter,and migrate your V1R4 NetView definition members and JCL procedures as appropriate, placing only those members that were modified into the V6R3 user datasets.<br><br>
+                Figure1 on page24 shows the initialization flow for NetView V1R4,and Figure2 on page24 shows the NetView V6R3 initialization flow.Keep  this new initialization flow in mind as you make changes to your DSIPARM members.<br>
+                </p>
+       <br><br> </div>
+    </section>
+    <section class="pg2">
+        <div class="data"><br>
+            <p><img src="img2.jpeg">
+            Figure1.NetViewV1R4InitializationFlow
+            <br><br><img src="img3.jpeg">
+            Figure2.NetViewV6R3InitializationFlow<br><br>
+           <b> Note:</b>Review CNMSTNXT to see statement changes made to CNMSTYLE members for NetView V6R3 program.<br>
+            When you finish with this chapter,continue with Chapter7,“Getting Ready to Start NetView,”on page87.<br>
+            For changes by release, including changed panels, commands, messages, and samples, see the following appendixes:<br>
+            •	AppendixA, “Changes from Tivoli NetView for z/OSV6R1 to Tivoli NetView for z/OSV6R2, ”onpage113<br>
+            •	AppendixB, “Changes from Tivoli NetView for z/OSV6R2 to Tivoli NetView for z/OSV6R2M1,” onpage129<br>
+            •	AppendixC, “Changes from Tivoli NetView for z/OSV6R2M1 to IBMZ NetView V6R3,”onpage147<br><br>
+            <h3 style="color: blue;">Migrating the Unattended or Procedural Feature <div class="line"></div></h3><br>
+            The NetView Unattended and Procedur a loptions are no longer available. If you previously installed the NetView programusing the Unattended or Procedur a loptions, use the following steps to migrate to the NetView V6R3 program (Graphical Enterprise option).
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg3">
+        <div class="data"><br>
+            <p>Migrating to the Graphical Enter prise NetView program does not requirey out or unany of the graphical functions. However,there might be some additional installation steps that are required to activate the Graphical Enterprise option of NetView. You can skip certain installation steps that are marked as only applying to a graphical function that you do not want to activate. However, keep in mind that if at some point you decide to activate a graphical function, these installation steps need to be revisited to ensure that all of then ecessary setup is complete.<br><br>
+                Table13 on page25 lists functions that we reavailable with the V1R4 Graphical Enterprise option that are now available to you with the NetView V6R3 program.<br><br>
+                <img src="table1.jpeg" ><br><br>
+                RODM is available at the Unattended and Procedural levels of the NetView program but is mostly utilized by the graphical function savailable with the Graphical Enterprise option and there for emight no thave not been activated with your Unattended or Procedural NetView program.<br><br>
+                <h3 style="color: blue;">NewSamples <div class="line"></div></h3>
+                Table14onpage25listsnewsamplestoreviewduringmigration.<br><br>
+                Table14.ListofNewSamples<br><div class="line1"></div><br>
+                <img src="img1.jpeg">
+                </p>
+       <br><br> </div>
+    </section>
+    <section class="pg4">
+        <div class="data"><br>
+            <p>Table14.ListofNewSamples(continued)<br>
+            <img src="table2.jpeg" ></p>
+       <br><br> </div>
+    </section> 
+    <section class="pg5">
+        <div class="data"><br>
+            <p>Table14.ListofNewSamples(continued)<br>
+            <img src="table4.jpeg"></p>
+       <br><br> </div>
+    </section>
+    <section class="pg6">
+        <div class="data"><br>
+            <p>Table14.ListofNewSamples(continued)<br>
+            <img src="table6.jpeg"></p>
+       <br><br> </div>
+    </section>
+    <section class="pg7">
+        <div class="data"><br>
+            <p>Table14.ListofNewSamples(continued)<br>
+            <img src="table7.jpeg" ></p>
+       <br><br> </div>
+    </section>
+    <section class="pg8">
+        <div class="data"><br>
+            <p>Table14.ListofNewSamples(continued)<br>
+            <img src="table8.jpeg"></p>
+       <br><br> </div>
+    </section>
+    <section class="pg9">
+        <div class="data"><br>
+            <p><img src="table9.jpeg"><br><br>
+            <h3 style="color: blue;">VTAMAddressSpace <div class="line"></div></h3>
+            The samples in this section list changes for the VTAM address space.<br><br>
+        <b>A01APPLS(CNMS0013)</b><br>
+        This member contains the application (APPL) major no descoded for the NetView program.<br>
+        If you did not real locate and recopy the VTAMLST datasets, make the following changes to A01APPLS:<br>
+        •	Either set the domainID (system variable & CNMDOMN) in SYS1. PARMLIB member IEASYM xx or change<br>
+        every occurrence of & CNMDOMN. in A01APPLS (CNMS0013) to the current domainID.<br>
+        •	If you are not using the status monitor preprocessor, you can replace the APPL statements defining tasks for multiple concurrent NetView operators with one APPL statement using wild card characters (??), forexample:<br>
+        •	If you are not using the status monitor preprocessor, you can replace the TAFAPPL statements with one APPL statement using wild card characters (??) following the LUname, forexample:<br><br>
+        <img src="img4.jpeg"><br>
+         
+        APPL names defined for use by other applications (such as TAF) must not be defined with the samenaming scheme as terminal logon APPLs (for example, the domain name followed by a 3-charactersuffix). Doing so can cause these application names to be used by the NetView program for terminal logons, which can make the application name sun available for the purpose for which they were defined.<br>
+      <br> <b> CNMNET(CNMSJ008)</b><br>
+        CNMNET (CNMSJ008) is the start procedure for the VTAM program. Change CNMNET in your PROCLIB in the following way:<br>
+        1.	For NetView data setsensure your high- level qualifier for system datasets points to NETVIEW. V6R3M0.
+        </p>
+       <br><br> </div>
+    </section>
+    <section class="pg10">
+        <div class="data"><br>
+            <p>2.For NetView data setsen sure yourhigh- level qualifier for user-defined data sets spoints to NETVIEW.V6R3USER.<br>
+
+               <h3 style="color: blue;"> NetView Address Space <div class="line1"></div></h3>
+                The samples in this section list changes for the NetView address space.<br><br>
+               <b> AAUPRMLP</b><br>
+                The AAUPRMLP member in the DSIPARM data set contains initialization statements for the session monitor. It includes logic to extract initialization values from the CNMSTYL Emember. Use the V6R3 copy of the AAUPRMLP member, and update the NLDM statements in the CNMSTUSR or CxxSTGEN member to reflect the values previously specified in the AAUPRMLP member. Do not modify the version of the AAUPRMLP member that is included with the NetView product.<br><br>
+                
+                <b>BNJMBDST</b><br>
+                If you made changes to the BNJMBDST hard ware monitor initialization member, migrate the changes to the CNMSTUSR or Cxx STGEN member. Most BNJMBDST statements have as sociated statements in the CNMSTYLE member (for example, NPDA. DSRBO or NPDA. ALERTFWD).<br><br>
+                BNJMBDST statements that apply to DST members (for example XITCI) have no as sociated CNM STYLE statements. In this case, add these statements to the Data REXX version of the BNJMBDST member.<br>
+                Make sure that you enclose the statements in quotation marks so that the REXX program can return them as NetView data lines rather than interpreting them as REXX statements.<br><br>
+                <b>CNMEALUS</b><br>
+                The CNMEALU SREXXEXEC sample is enhanced. This sample provides example son how to add user data to alert information and pass the alert information to either the alert adapter or the confirmed alert adapter of Event/ Automation Service.<br><br>
+                
+                <b>CNMEMSUS</b><br>
+                The CNMEMSUS REXXEXEC sample is enhanced. This sample provides example son how to add user data to message information and pass the message information to either the message adapter or the confirmed message adapter of Event/ Automation Service.<br><br>
+                 <b>CNMPROC (CNMSJ009)</b><br>
+                CNMPROC (CNMSJ009) is the start procedure for the NetView program. Make the following changes to CNMPROC in your PROCLIB:<br>
+                1.	For NetView datasets ensureyour high-level qualifier for user- defined datasets points to NETVIEW. V6R3USER.<br>
+                2.	For NetView datasets ensure your high-level qualifier for system datasets points to NETVIEW. V6R3M0.<br>
+                3.	Because the AONVSAM datasets have increased insize, real locate them during migration. Formore information aboutal locating VSAM datasets, refer to IBMZ NetView Installation: Getting Started. Also note that the VSAM cluster name prefixes have changed to NETVIEW. & domain.<br>
+                4.	Add the following TQ1 statement after the VQ1 statement to specify the high-level qualifier of your NetView sequential datasets:<br>
+                <img src="img5.jpeg">
+                This statement does not affect the dynamical location of the sequential datasets used by the archive Can zlog function.<br>
+                </p>
+       <br><br> </div>
+    </section>
+    <section class="pg11">
+        <div class="data"><br>
+            <p>5.The default regionsize was increased to 256M. If you are using the existing default regionsize (98304K) for the NetView product, increase the regionsize value:<br>
+                <center><h6>REG=256,	**REGIONSIZE(INM)FORNETVIEW</h6></center>
+                Depending on the components that you are running, you might want to increase the regionsize even more. For additional information, refer to the IBMZ NetView Tuning Guide.<br>
+                6.	Add the following REXX statement after the SQ1 statement to specify the high-level qualifier of your REXXb libraries:<br>
+                <center><h6>REXX='EAG.V1R4M0',	**REXXDSNHIGHLEVELQUALIFIER</h6></center>
+                7.	Add the following TRSIZE statement and comments after the NV2I statement to allow the specification of the trace table size:<br>
+                 <h6 style="margin-left: 30%;">
+                    NV2I='',<br>
+                    TRSIZE=4000<br>
+                    **INTERNALTRACETABLESIZE-Number<br>
+                    **ofpagestobeallocatedforthe<br>
+                    **NetViewInternalTracetable.The<br>
+                    **tracetableislocatedinadata<br>
+                    **space,sothevaluecanbeupto<br>
+                    **524286.Ifnovalueisspecified,<br>
+                    **thedefaultof4000isused.If<br>
+                    **avalueof0ispassed,internal<br>
+                    **traceisnotstartedearly.Trace<br>
+                    **optionsinCNMSTYLEtakeeffect<br>
+                    **eveniftraceisnotstartedearly.<br>
+                    </h6>
+                8.	Add the & TRSIZE variable to the NetView EXEC statement, as shown:<br>
+                <h6>//NETVIEWEXECPGM=&PROG,TIME=1440,<br>
+                    //	        REGION=&REG.K,<br>
+                    //	        PARM=(&BFSZ.K,&SLSZ,<br>
+                    //	        '&DOMAIN','&DOMAINPW','&ARM','&SUBSYM','&NV2I','&TRSIZE'),<br>
+                    //	        DPRTY=(13,13)<br>   
+                    </h6>
+                9.	Remove the following DD statement from the STEPLIB concatenation:<br>
+                    <center><h6>//	DD	DSN=&SQ1..SEKGMOD1,DISP=SHR</h6></center>
+                10.	 Add the SAQNLINK data seta head of the CNMLINK dataset in the STEPLIB concatenation:<br>
+                <center><h6>SQ1..SAQNLINK,DISP=SHRDSN=&SQ1..CNMLINK,DISP=SHR</h6></center>
+                11.	Change the following DD statement in the STEPLIB concatenation (change SEAGLMD to SEAGLPA):<br>
+                <h6>//*YOU WILL NEED ACCESSTOEITHER THE REXX/370 RUN TIME LIBRARY<br>
+                    //*OR THE REXXAL TERNATE LIBRARY AS FOLLOWS:<br>
+                    //*<br>
+                    //*-IF YOU HAVE THE REXX/370 LIBRARY ON YOUR SYSTEM BUT SEAGLPA<br>
+                    //*	IS NOT ACCESSIBLE FROM THE PAGEABLE LINK PACKAREA (PLPA),<br>
+                    //*	THENYOU MUST UNCOMMENT THE "SEAGLPA" LINE BELOW.<br>
+                    //*<br>
+                    //*	OR<br>
+                    //*<br>
+                    //*-IF YOU HAVE THE REXXAL TERNATE LIBRARY ON YOUR SYSTEM,<br>
+                    //*	BUT SEAGALT IS NOT ACCESSIBLE FROM THEPLPA OR LINKLST,<br>
+                    //*	THEN YOU MUST UNCOMMENT THE "SEAGALT "LINE BELOW.<br>
+                    //*<br>
+                    //*WHEN YOU UNCOMMENT EITHER OF THE LINES BELOW, MAKE SURE<br>
+                    //*THAT THE DSNACTUALLY MATCHES THE NAME ON YOUR SYSTEM.<br>
+                    //*IN ADDITION, MAKE SURE THAT THE DATA SETISAPF- AUTHORIZED.<br>
+                    //*<br>
+                    //*	DD	DSN=&REXX..SEAGLPA,DISP=SHR<br>
+                    //*	DD	DSN=&REXX..SEAGALT,DISP=SHR<br>
+                    </h6>
+                 
+                <b>Note:</b>EithertheREXX/370runtimelibraryortheREXXalternatelibraryisrequired.
+                </p>
+       <br><br> </div>
+    </section>
+    <section class="pg12">
+        <div class="data"><br>
+            <p>12.If you plantouse the Web Services Gate way function, uncomment the XM Llibrary DD statement.<br>
+            <h6>//***************************************************************<br>
+                //*<br>
+                //*IF YOU ARE STARTING THE NETVIEW WEB SERVICES SERVER THEN<br>
+                //*YOU WILL NEED ACCESS TO THE IBMXMLTOOL KIT RUN TIME LIBRARY.<br>
+                //*<br>
+                //*-IF YOU HAVE THIS LIBRARY ON YOUR SYSTEM BUT IT IS NOT<br>
+                //*	ACCESSIBLE FROM THE PLPA OR LINKLST, THEN YOU MUST<br>
+                //*	UNCOMMENT THE LINE BELOW.<br>
+                //*<br>
+                //*WHEN YOU UNCOMMENT THE LINE BELOW, MAKE SURE THAT THEDSN<br>
+                //*ACTUALLY MATCHES THE NAME ON YOUR SYSTEM. IN ADDITION,<br>
+                //*MAKE SURE THAT THE DATASETISAPF- AUTHORIZED.<br>
+                //*<br>
+                //*FOR THE LINE BELOW, THE FOLLOWING JCL SYMBOLICIS ASSUMED:<br>
+                //*QIXM='IXM.V1R10M0',**IBMXML TOOL KIT RUN TIME LIB.<br>
+                //*<br>
+                //* DD  DSN=&QIXM..SIXMLOD1,DISP=SHR<br>
+                </h6>
+                13.	Remove the following statements from the STEP LIB concatenation:<br>
+            <h6>//	DD	DSN=&SQ1..SEZLLINK,DISP=SHR</h6><br>
+            14.	If you plan to run Language Environment® (LE) HLL programs with the NetView program, and did not install the LE run time library in the LNKLSTxx, be sure the library name in the STEPLIB of CNMPROC is correctand uncommented.<br>
+            15.	Update the DSICLD DD statement to add the CNMCLST and SAQNCLST datasets:<br>
+            //DSICLD	DD  DSN=&Q1..&DOMAIN..CNMCLST,DISP=SHR<br>
+            //	DD      DSN=&SQ1..SAQNCLST,DISP=SHR<br>
+            //	DD      DSN=&SQ1..CNMSAMP,DISP=SHR,<br>
+            //	DD      DSN=&SQ1..CNMSAMP,DISP=SHR<br>
+            //*	DD        DSN=SYS1.PROCLIB,DISP=<br>
+            Remove the following DD statements from the DSICLD concatenation:
+             <h6>//     DD	DSN=&SQ1..SEZLCLST,DISP=SHR</h6>
+             16.Add the SAQNPARM data set a head of the DSIPARM dataset:<br> 
+            <h6>//DSIPARMDD     DSN=&Q1..&DOMAIN..DSIPARM,DISP=SHR<br>
+                //	DD          DSN=&SQ1..SAQNPARM,DISP=SHRDSN=&SQ<br>
+                //	DD          1..DSIPARM,DISP=SHR<br></h6>   
+            17.	Remove the following statements from the CNMPNL1 concatenation:<br> 
+        <h6>//      DD	DSN=&SQ1..SEKGPNL1,DISP=SHR<br>
+            //*COMMENTTHEFOLLOWINGLINEOUTIFYOUWILLNOTBEUSINGAONINFORM<br>
+            //*POLICY,TIMERCOMMAND,CGEDCOMMANDORDMCOMMAND.<br>
+            //	DD	DSN=&Q1..&DOMAIN..SEZLPNLU,DISP=SHR<br>
+            //	DD	DSN=&SQ1..SEZLPNLU,DISP=SHR<br>
+            :
+            //*UNCOMMENTTHESEKGPNL2DEFINITIONSTATEMENTFORAJAPANESE<br>
+            //*SYSTEMWITHRODM<br>
+            //*	DD	DSN=&SQ1..SEKGPNL2,DISP=SHR<br>
+            </h6>
+            Update the CNMPNL1 concatenation in the following way:
+        <h6>//CNMPNL1DD	DSN=&Q1..&DOMAIN..CNMPNL1,DISP=SHR<br>
+            //*JAPANESEONLINEHELPDATASET(PANELS)<br>
+            //*	DD	DSN=&SQ1..SCNMPNL2,DISP=SHR<br>
+            //*ENGLISHONLINEHELPDATASET(PANELS)<br>
+            //	DD	DSN=&SQ1..CNMPNL1,DISP=SHR<br>
+            </h6>
+            18.Add the following TCP connection VSAM databases:
+             <h6>//DSITCONPDD	DSN=&VQ1..&DOMAIN..DSITCONP,<br>
+                //	DISP=SHR,AMP='AMORG'<br>
+                //DSITCONSDD	DSN=&VQ1..&DOMAIN..DSITCONS,<br>
+                //	DISP=SHR,AMP='AMORG'<br>
+                </h6></p>
+       <br><br> </div>
+    </section>
+    <section class="pg13">
+        <div class="data"><br>
+            <p>19.Add the following datasets to collect distributed DVIPA statistics:<br>
+                <h6>//CNMDVIPPDD	DSN=&TQ1..&DOMAIN..CNMDVIPP,DISP=SHR<br>
+                    //CNMDVIPSDD	DSN=&TQ1..&DOMAIN..CNMDVIPS,DISP=SHR<br>
+                    </h6>
+                20.	Update the EZL STATDD statement:<br>
+                <h6>//*EZLSTATDD	DSN=&VQ1..&DOMAIN..STATS,<br>
+                    //*	DISP=SHR,AMP='AMORG,BUFNI=10,BUFND=5'<br>
+                    </h6>
+            21.	Update the EZL PSWD DD statement:<br>
+            <h6>//*EZLPSWDDD	DSN=&VQ1..&DOMAIN..PASSWORD,<br>
+                //*	DISP=SHR,AMP='AMORG,BUFNI=10,BUFND=5'<br>
+                </h6>
+            22.Update the A ON log DD statements:<br>
+            <h6>//*EZLLOGPDD	DSN=&VQ1..&DOMAIN..LOGP,<br>
+                //*	DISP=SHR,AMP='AMORG,BUFNI=10,BUFND=5'<br>
+                //*EZLLOGSDD	DSN=&VQ1..&DOMAIN..LOGS,<br>
+                //*	DISP=SHR,AMP='AMORG,BUFNI=10,BUFND=5'<br>
+                </h6>
+            23.Add the following TCP/ IP translate dataset information and update the statement as needed for your installation:<br>
+            <h6>//*<br>
+                //***************************************************************<br>
+                //*If you are using the TCP/ IP translate dataset TCPXL BIN,<br>
+                //*specify the appropriate dataset name and uncomment the<br>
+                //*following DD statement toprevent dynamic allocation<br>
+                //*messages from being issue deach time the dataset is needed.<br>
+                //*<br>
+                //*CNMXL BIN DD DISP=SHR, DSN= dataset prefix. STANDARD. TCPXLBIN<br>
+                //*<br>
+                //*For more information please see your IP Con figuration Guide.<br>
+                </h6>
+                <h2><b style="color: blue;">CNMPSSI(CNMSJ010)</b></h2>
+                CNMPSSI (CNMSJ010) starts the NetView sub system address space. Make the following changes to CNMPSSI in your PROCLIB:<br> 
+                1.	Ensure that the high-level qualifier for system datasets points to NETVIEW. V6R3M0.<br>
+                2.	The MBUF, CBUF, DSIG, MSGIFAC, and PFXREG keywords are no longer used and their values are ignored. For migration purposes, these keywords must not be removed.<br>
+                3.	Add the following statements after the P4000BUF parameter to set the route code. If you add these statements, add a comma after the P4000BUF=0 statement.<br>
+                <h6>
+                    //	ROUTECDE=1	**Route code to be used for WTOs issued<br>
+                    //*		**by the SSI addres sspace. Messages<br>
+                    //*		**that may be issued be for ethis parm<br>
+                    //*		**is processed will user out ecode1 <br>
+                    //*		**regard less of the valuese there.<br>
+                    </h6>
+                4.	Add the & ROUTECDE variable to the NetView EXEC statement, as shown:<br>
+                <h6>//NETVIEW EXE CPGM= & PROG, TIME=1440, REGION=&REG.K ,<br>
+                    //	PARM= (& MBUF, &CBUF, '&DSIG', '&MSGIFAC', '&PPIOPT', '&ARM', <br>
+                    //	'&PFXREG', &P256BUF, &P4000BUF, &ROUTECDE), DPRTY =(13,13) <br>
+                    </h6>
+                Note that the &MBUF, &CBUF, &DSIG, &MSGIFAC, and & PFXREG values are ignored.<br><br>
+                <h2><b>CNMSIHSA</b></h2>
+                The CNMSIHSA automation table sample is enhanced. This sample provides examples on how to automate messages and alerts in order to send message and alert data to the various Event/ Automation Service adapters:<br>
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg14">
+        <div class="data"><br>
+            <p>
+                •	Messageadapter<br>
+                •	Confirmedmessageadapter<br>
+                •	Alertadapter<br>
+                •	Confirmedalertadapter<br>
+                •	Alert-to-trapadapter<br>
+                <h2><b>CNMSTYLE</b></h2>
+                The CNM STYLE member in the DSIPARM dataset is used during NetView initialization. Make any changes to CNM STYLE statements in the CNMSTUSR member for system-wide defaults or the Cxx STGEN member for enterprise- wide defaults. For information about changing CNM STYLE statements,see IBMZ NetView Installation: Getting Started. The CNMSTYLE member is designed to simplify the NetView initialization process.<br>
+                <b>Note:</b>
+                •There are significant differences in the CNM STYLE statements that were added or changed since the NetView V1R4 release. The default TOWER statement in the CNMSTYLE member shows towers available for the NetView V6R2M1 program:<br>
+                <h6> TOWER= *SA *AON *MSM *Graphics NPDANLDMTCPIP COLLECT<br>
+                    *AMI *DVIPA *TEMA *IPMGT *NVSOA DISCOVERY<br>
+                    </h6>
+                    
+            •You can use MODIFY. TOWER statements in either of the CNMSTUSR or Cxx STGEN members to effect needed changes. (See MODIFY.TOWER in IBM Z NetView Administration Reference.) For example, you can activate AON and its TCP sub tower by coding this statement:<br>
+                    <h6> MODIFY. TOWER. sortkey=+AON+AON. TCP</h6>
+                    
+            You can use the CNMSJMIG sample job in the NETVIEW.V6R3USER.INSTALL data set to migrate initialization members from prior releases (including the CNME1034 command list and some DSIPARM members) to the CNMSTUSR member. For more information, see Appendix F, “Migrating to the CNMSTYLE and CNMCMD Members,” on page161.<br>
+            Table15 on page36 lists the towers and sub towers that were added.<br><br>
+                    <img src="table10.jpeg">
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg15">
+        <div class="data"><br>
+            <p>
+                <img src="table11.jpeg">
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg16">
+        <div class="data"><br>
+            <p>
+                <img src="table12.jpeg"><br><br>
+                Table16 on page38 lists the towers and sub towers that were deleted.<br><br>
+                <img src="table13.jpeg" ><br><br>
+                The CNMSTYLE member replaces some of the definition statements in members of the DSIPARM dataset and all the initialization performed by the CNME1034 command list.<br><br>
+                <img src="table14.jpeg" ><br>
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg17">
+        <div class="data"><br>
+            <p><img src="table15.jpeg"><br><br>
+                The CNMSTYLE member contains descriptive comments about the types of statements that are included. Read the comments and review the defaults.<br>
+                Because the NetView 3270 management console was removed, the TASK. DSITCPIP. INIT statement was deleted.<br>
+                Thefollowingdefaultschanged:<br>
+                </p>
+       <br><br> </div>
+    </section>
+    <section class="pg18">
+        <div class="data"><br>
+            <p><img src="table16.jpeg"></p>
+       <br><br> </div>
+    </section>
+    <section class="pg19">
+        <div class="data"><br>
+            <p>
+                <img src="table17.jpeg"><br><br>
+               <h2><b> CNMSTYLE statement notes:</b></h2>
+                1.For the SECOPTS. CMDAUTH statement, the NetView program supports the SCOPE option in migration mode only. If you currently use scope of commands security definitions (CMDCLASS, KEYCLASS, VALCLASS statements in DSICMD, with matching OP CLASS statements), you can convert them in to equivalent command authorization table statements using the SECMIGR command.If you initialize the NetView program using the SCOPE option, the SECMIGR command is used to convert existing scope security definitions. The converted table is written to the first DSIPARM dataset and is put in to effect.<br>
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg20">
+        <div class="data"><br>
+            <p>Make sure the PPT has authority to write the converted command authorization table to the DSIPARM dataset.<br>
+                2.The SSI name statement is no longer used; if specified, it is ignored.<br>
+                The name of the sub system router task is CNMCSSIR. Starting with NetView V6R1, changing the task name of the sub system router has no utility and is not supported.<br>
+                For information about new, changed, or deleted CNMSTYLE statements, see “CNMSTNXT” on page42.<br><br>
+                <b>CNMSTACT</b><br>
+                The CNMSTACT member includes the CNMSTAAL member if the IBM Z NetView for Continuous Availability product is installed. The CNMSTACT member is used for the GDPS Continuous Availability solution.<br><br>
+               <b> CNMSTIDS</b><br>
+                The CNMSTIDS include member contains Intrusion Detection Services statements. The z/ OS Communications Server Version1 Release13 and Version2 Release1 Intrusion Detection Services probes are added.<br>
+                <b>CNMSTNXT</b><br>
+                The CNMSTNXT member contains statements that are new, changed, ordeleted. Statements are grouped according to version and release level of the NetView product. Review the statements in the CNMSTNXT member and update the CNMSTUSR or CxxSTGEN member as necessary.<br><br>
+               <b> Ifyouwantinformationabout... Referto...</b><div class="line"></div><br>
+                CNMSTYLE statements                      	IBMZ NetView Administration Reference<br>
+                
+               <b> DSIAMLTD</b><br>
+                The DSIAMLTD member in the DSIPARM data set contains initialization statements for the sessionmonitor. It includes logic to extract initialization values from the CNMSTYLE member. Use the V6.3.0DSIAMLTD member, and update the NLDM statements in the CNMSTUSR or CxxSTGEN member to reflect the values specified in the DSIAMLTD member on the system from which you are migrating. Do not modify the DATAREXX version of the DSIAMLTD member.<br>
+                
+                <b>DSICCDEF</b><br>
+                If you made changes to DSICCDEF, merge your current copy of DSICCDEF with the sample shipped with V6R3. Note that the VTAM DISPLAY and MODIFY commands do not need CCDEF support.<br>
+               <b> DSICMD</b><br>
+                The command definition statements in the DSICMD member were replaced by new command definitionsin the CNMCMD member. NetView initialization continues to read the DSICMDU member for migration purposes. You can use the CNMSJMIG sample job to migrate the DSICMD member to the new CNMCMD format. For more information,see AppendixF, “Migrating to the CNMSTYLE and CNMCMD Members,” on page161.<br>
+                If you do not convert your definitions in the DSICMDU member to the new format before NetView initialization, information contained in the DSICMDU member is converted and stored in a NetView KEEP under the PPT for 2 hours. During this time, you can use a NetView PIPE command to retrieve theseconverted command definitions.The following example shows one way of retrieving these definitions for display:<br>
+                <h6>/PPT:PIPEKEEPDSICMDU|CONS</h6><br>
+                You can alsousea similar PIPE command to write the converted definitions to the CNMCMDU member of the DSIPARM dataset.
+                </p>
+       <br><br> </div>
+    </section>
+    <section class="pg21">
+        <div class="data"><br>
+            <p>
+                <b>Note:</b>Data REXX statements in DSICMDU have already been processed and the refore do not exist in the DSICMDU KEEP.<br><br>
+                Command definitions in the DSICMDU member that duplicate command definitions found in the CNMCMSYS or CNMCMENT member are over ridden by the latter. Command definitions in the DSICMDU member that duplicate commands in the NetView internal command set are considered tobein error.<br>
+                To migrate your definitions from the DSICMDU member, complete the following steps:<br>
+                1.	Start NetView inatest environment and note any DSI234I messages for duplicate command definitions.<br>
+                2.	Retrieve the migrated DSICMDU command definitions from the NetView KEEP and store them in CNMCMDU, for example:<br>
+                <center><h6>/PPT:PIPE KEEP DSICMDU| QSAM(DSN) user. dsiparm(CNMCMDU)</h6></center>
+                where user.dsiparmspecifies the data set in which to place the migrated command definition statements.<br>
+                <b>Note:</b> You can also use sample CNMSJMIG to migrate DSICMDU definitions before you start NetViewV6R3.<br>
+                3.	Update the CNMCMDU definitions to change any duplicate command definitions noted during NetView initialization.<br>
+                Make all changes to command definitions in CNMCMSYS or CNMCMENT using CMDDEF statements in CNMCMDU.<br>
+                <b>DSICMENT</b><br>
+                The DSICMENT member of DSIPARM was replaced by CNMCMENT. You can remove SEC=BY from someA ON command definition statements. For a list of these statements, refer to AppendixE, “AONCMDDEF Statements Not Requiring SEC=BY,” on page157.<br>
+                <b>DSICMSYS</b><br>
+                The DSICMSYS member in the DSIPARM dataset was replaced by the CNMCMSYS member.<br>
+                The CNMCMSYS member does not contain a CMDMDL statement for the CNME1500 command list. As a result, the READYRMT alias (command) is no longer defined. The CNME1500 member is still available.<br>
+                <b>EZLCMD</b><br>
+                The EZLCMD member of DSIPARM was replaced by EZLCMENT. You can remove SEC=BY from some AON command definition statements. For a list of these statements, refer to Appendix E, “AON CMDDEF Statements Not Requiring SEC=BY,” on page157.<br>
+               <b> FKXCMD</b><br>
+                DSIPARM member FKXCMD was replaced by FKXCMENT. You can remove SEC=BY from some AON command definition statements. For a list of these statements, refer to AppendixE, “AONCMDDEF Statements Not Requiring SEC=BY,” on page157.<br>
+
+                <b>DSICTMOD</b><br>
+                DSICTMOD is the NetView constants module that can be updated using sample job CNMS0055. Use the DSICTMOD module shipped with V6R3.If you updated CNMS0055 for your current release,merge those changes into the V6R3 CNMS0055 sample, submit it to assemble, and link edit your changes into the DSICTMOD module.<br>
+                The number of task and common global variable constants are now obsolete. The NetView program dynamically increasess to rageas needed.<br>
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg22">
+        <div class="data"><br>
+            <p><b>DSIDMN</b><br>
+                The parameters set in the DSIDMN member were migrated to the CNMSTYLE member. If you do not remove existing statements, they are ignored during DSIDMN processing.<br>
+                User-defined TASK statements are still supported.You can also add these statements to the CNMSTYLE member. For information about the CNMSTYLE TASK statements, see IBM Z NetView Administration Reference.<br><br>
+                EXCMDSEC is no longer supported. Review your keyword and value authorizations for the EXCMD command to make sure that you maintain your preferred security. For more information, refer to IBMZ NetView Security Reference.<br><br>
+                <b>Note:</b> Statements that were in the DSIDMNK member are now in the CNMSTYLE member. The DSIDMNK member was removed.<br><br>
+                <b>DSIIFR</b><br>
+                As of NetView V6R1, the IFRAUWWI field is removed from the DSIIFR macro.To retrieve or test the WTOID, use the IFRAUWID field instead. The IFRNLYESf lag no longer has any use. Remove references to this bit.<br>
+               <b> DSIILGCF</b><br>
+                The DSIILGCF member in the DSIPARM dataset defines the initialization values for the IP log.It includes logic to extract initialization values from the CNMSTYLE member. Update IPLOG statements in the CNMSTUSR or CxxSTGEN membert or eflect the values previously specified in the DSIILGCF member.<br>
+               <b> DSILUCTD</b><br>
+                The DSILUCTD member in the DSIPARM data set contains initialization statements for the CNM data transfer task. It includes logic to extract initialization values from the CNMSTYL member. Update LUC statements in the CNMSTUSR or CxxSTGEN member to reflect the values specifiedin DSILUCTD on the system from which you are migrating.<br>
+                
+                <b>DSIOPF</b><br>
+                Starting with V6R2,the DSIOPF member has a new structure:
+                <img src="table21.jpeg"><br>
+                </p>
+       <br><br> </div>
+    </section>
+    <section class="pg23">
+        <div class="data"><br>
+            <p>
+                <img src="table20.jpeg"><br><br>
+                If you modified the V1R4DSIOPF member and you want to use the new structure, copy any changes that you made in to theap propriate V6R3 member.<br><br>
+
+               <b> %INCLUDE Members Usage notes:</b><br>
+                1.	Data REXX logic was added to conditionally defineoperat or definitions based on the level of the NetView program installed, the towers that are enabled by the CNMSTYLE member, or both.<br>
+                2.	You can add Data REXX logic to conditionally define operator definitions in DSIOPFU. Data REXX filesmust have either /*%DATA*/ or /*%LOGIC*/ as the first statement. Comments can follow on thesame or subsequent lines. A blank in the first column indicates a continuation of the previous statement. For more information about Data REXX, refer to IBM Z NetView Installation: Configuring Additional Components.<br>
+                3.	TheFKXOPFIP member is used when the IPMGT tower is enabled. This member is not used if the AON component is enabled. Because of this, operator definitions duplicate those in the EZLOPF and FKXOPF members.<br><br>
+
+                <b>Added Operators</b><br>
+                The following operator definitions were added:<br>
+                <img src="table19.jpeg" ><br><br>
+                
+                <b>Deleted Operators</b><br>
+                The following operat or definitions were deleted:<br>
+
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg24">
+        <div class="data"><br>
+            <p>
+                <img src="table18.jpeg"><br><br>
+                
+                <b>DSIREXCF</b><br>
+                The DSIREXCF member in the DSIPARM dataset defines the initialization values for the REXEC Server. It includes logic to extract initialization values from the CNMSTYLE member. Update REXEC statements in the CNMSTUSR or CxxSTGEN member to reflect the values previously specified in the DSIREXCF member. Do not modify the Data REXX version of the DSIREXCF member.<br><br>
+
+                <b>DSIRSHCF</b><br>
+                The DSIRSHCF member in the DSIPARM data set defines the initialization values for the RSH Server. It includes logic to extract initialization values from the CNMSTYLE member. Update RSH statements in the CNMSTUSR or CxxSTGEN member to reflect the values previously specified in the DSIRSHCF member. Do not modify the Data REXX version of the DSIRSHCF member.<br><br>
+
+                <b>DSIRTTTD</b><br>
+                The DSIRTTTD member of the DSIPARM data set contains initialization statements for the TCP/IP alert receiver. It includes logic to extract initialization values from the CNMSTYLE member. Update RTT statements in the CNMSTUSR or CxxSTGEN member to reflect the values that you previously specified in the DSIRTTTD member. Do not modify the Data REXX version of the DSIRTTTD member.<br><br>
+
+               <b> DSIRXPRM</b><br>
+                The DSIRXPRM load module contains the REXX initialization parameters that are required to establish a new REXX environment.<br><br>
+              <b>  Note:</b> If you previously added any REXX initialization parameters to the DSIRXPRM module, delete the previous version of the DSIRXPRM module. As of NetView V6R2, the NetView program is not compatible with previous versions of the DSIRXPRM module.<br>
+                Define the previously added REXX initialization parameters as follows:<br><br>
+                •	If you previously added REXX command environments or REXX function package names to the DSIXPRM module, migrate those changes to the CNMSTYLE (CNMSTUSR or CxxSTGEN) member by using the following CNMSTYLE statements. For more information about these statements, see the Administration Reference.<br>
+                –	REXX.CMDENV.name<br>
+                –	REXX.FUNCPKGLIST.LCL.name<br>
+                –	REXX.FUNCPKGLIST.SYS.name<br>
+                –	REXX.FUNCPKGLIST.USR.name<br>
+                •   If you previously added other REXX initialization parameters to the DSIRXPRM module, merge those changes in to the V6.3.0 version of the CNMSJM11 sample. Ensure that you deleted the earlier version<br>
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg25">
+        <div class="data"><br>
+            <p>
+                of the DSIRXPRM module, and then run the CNMSJM11 sample to as sembleand linkedit your changes in to the DSIRXPRM module.<br>
+                <b>Note:</b> You must delete the earlier version of the DSIRXPRM module because it was linkedited with the RENT attribute where as the current version is linkedited with the REUS at tribute.<br>
+              •	If you previously added the system REXX function package for IBM Z System Automation to the DSIRXPRM module, drop the modified DSIRXPRM module from your environment. The System Automation INGRXFPGREXX function package is loaded automatically when the SA tower is enabled.If necessary, use the previous migration steps to include other System Automation REXX function packages.<br>
+                <b>DSISPN</b><br>
+                The DSISPN member is now obsolete.<br>
+                Use the SECMIGR migration tool to convert existing VTAMLST and DSISPN definitions in to entries in the NetView span table. The SECMIGR tool creates the span table, converts your existing span of control definitions into span table statements, and loads them into the span table. When you are ready to initialize the NetView program, load the NetView span table by specifying its name on the SECOPTS. SPANAUTH statement in the CNMSTUSR or CxxSTGEN member. For an example span table, refer to the CNMSPAN2 sample.<br><br>
+
+               <b> DSITBL01</b><br>
+                The DSITBL01 automation table is the default NetView automation table and is required by the NetView program. The DSITBL01 automation table provides basic automation statements to respond to messages and management services units (MSUs). If the DSITBL01 automation table is not activated during NetView initialization, the DWO093W warning message is issued by the NetView program.<br><br>
+                Some % INCLUDE statements and as sociated statements to start automation were replaced by entries in the CNMSTYLE member. If you modified the DSITBL01 member, merge your changes with the V6R3DSITBL01 member. After making changes, renumber the NetView automation table. When the NetView automation table processes a message and finds a match that results in a command or command listbeing run, it writes the CNM493I message to the NetView log file. The CNM493I message contains the line number of the automation table entry matched.<br><br>
+                Several messages that are supplied with the NetView product are changed with the V6R3 program.These messages are listed in the appendixes. Review the list and make any necessary changes to your automation table.<br><br>
+                You can add your own automation table by using the AUTOCMD statement in the CNMSTUSR or CxxSTGEN member. Place your automation table before the DSITBL01 automation table and code CONTINUE(YES) on any local customization to make sure that messages flow to the DSITBL01 automation table. For more information on the AUTOCMD statement, refer to the IBM Z NetView Administration Reference.<br><br>
+                Message automation isused to update information when some discovery manager resources start and stop. Add the CNMSEPTL automation sample member for these events. The CNMSEPTL member is included when the DISCOVERY tower is enabled.<br><br>
+                <h6>*Loadlocalresourcediscoverytable<br>
+                    %>IFtower('DISCOVERY')THEN<br>
+                    %INCLUDECNMSEPTL<br>
+                    </h6>
+                    For DVIPA automation, add the following statements:<br><br>
+                    <h6>*	Include the following DVIPA samples:<br>
+                        *	CNMSDVDS- Automation for forwarding information to the master NetView<br>
+                        *	CNMSDVTP- Samples for automatingz/OS Communications Server SNMP<br>
+                        *	DVIPA traps<br>
+                        *	CNMSDVCG- Samples for automatingz/OS Communications Server DVIPA<br>
+                        *	configuration updates<br>
+                        *	CNMSDVEV- Automationtable memmber for DVIPASMF run time updates that<br>
+                        *	is included when the DVIPA tower is enabled.<br>
+                        </h6>
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg26">
+        <div class="data"><br>
+            <p>
+                <h6>*	CNMSSMON-Samplesforautomatingz/OSCommunicationsServer<br>
+                    *	sysple x autonomics messages<br>
+                    %>IFtower('DVIPA')THEN<br>
+                    %>do;<br>
+                    %INCLUDE CNMSDVDS<br>
+                    %INCLUDE CNMSDVTP<br>
+                    %INCLUDE CNMSDVCG<br>
+                    %INCLUDE CNMSDVEV<br>
+                    %INCLUDE CNMSSMON<br>
+                    %>end;<br>
+                    </h6>
+                    For XCF sysple x support, add the following statements:<br>
+                    <h6>**Loadstatementsthatrelatetothez/OSsysplexmasterfunction.<br>
+                        %INCLUDECNMSXCFA<br>
+                        </h6>
+                    For COLLCTL command automation, add the following tatements:
+                    <h6>***************COLLCTLcommandAUTOMATION****************************<br>
+                        %INCLUDECNMSDCA<br>
+                        </h6>
+                    For SMF type 30 record automation using the CNMSMF3E sample, add the following statements:<br>
+                    <h6>***************SMF30RECORDAUTOMATION******************************IFMSGID=<br>'BNH874I'THEN<br>
+                        EXEC(CMD('CNMSMF3A'))NETLOG(Y)SYSLOG(N);<br>
+                        </h6>
+                    For more information about automating the SMF type30 records, see IBMZ NetView Installation: Configuring Additional Components.<br><br>
+                    For Intrusion Detection automation for automating syslog dfile archival, add the following statement:<br>
+                    <h6>%>IFTOWER('AON.TCP.IDS')|TOWER('IPMGT.IDS')THEN/*IDS?<br>
+                    %>DO;<br>
+                    *Join the two line sina two line MLTWO and extract afile name. IFMSGID='BPXF024I'<br>
+                    &ACQUIRE('1.*1FWDLINE11.*NW')=<br>
+                .'FSUM1230Logfile'FNAME'wascreated'.&ATF('DSICGLOBCNMSTYLE.IDS.SYSLOGMSG')='Y'<br>                            &ATF('DSIC GLOBCNMSTYLE. IDS. SYSLOG. FILENAME')= VALUE (FNAME) THEN EXEC (CMD ('/?IDS2:GO') ROUTE(ALLPPT))<br>
+                    NETLOG(Y) DISPLAY(Y);<br>
+                    %>END;	/*IDSisenabled	*<br></h6>
+                    <b>DSITCPCF</b><br>
+                    The DSITCPCF member in the DSIPARM data set defines the initialization values for the DSITCPIP task. Do not modify the Data REXX version of the DSITCPCF member. Because the NetView 3270 management console was removed, the MCON statements were removed from the DSITCPCF member.<br><br> 
+                   <b> DSITCPRF</b><br>
+                  The DSITCPRF member in the DSIPRF dataset defines TCP/IP operator security profiles. The WEB_SERVER statement was added to define the encryption keys for HTTP server sessions:<br>
+                   <h6>WEB_SERVER: default default</h6><br>
+                  The operator ID and ANY_OTHER statements were removed.<br><br>
+                   <b>DSIWBMEM</b><br>
+                   The DSIWBMEM member in the DSIPARM dataset defines initialization values for the Web server. It now includes logic to extract initialization values from the CNMSTYLE member. Update the WEB statements in the CNMSTUSR or CxxSTGEN member to reflect the values previously specified in the DSIWBMEM member. Do not modify the Data REXX version of the DSIWBMEM member.<br>
+                                   
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg27">
+        <div class="data"><br>
+            <p>
+              <b>  DSIZVLSR</b><br>
+                The DSIZVLSR module defines the buffer pools to be used with the VSAM LSR and DSR performance options. Update the DSIZVLSR module by using the CNMSJM01 sample job. Use the DSIZVLSR module shipped with V6R3. If you previously updated the CNMSJM01 job, merge those changes in to the V6R3CNMSJM01 job and run it to as semble and linkedit your changes in to the DSIZVLSR module.<br><br>
+                The following changes were made to the DSIZVLSR module:<br>
+                •	The default STRNO value was increased from 30 to 40.<br>
+                •	New buffers were added to the index and data buffer pools for the new VSAM clustersal located for the DSITCONT task to support the TCPCONN command.<br>
+                •	Removed TARA support (BNJDSE36).<br>
+                <b>DUIFPMEM</b><br>
+                The DUIFPMEM member in the DSIPARM data set contains TCP/IP initialization statements for theCNMTAMEL task. It includes logic to extract initialization values from the CNMSTYLE member. Update TAMEL statements in the CNMSTUSR or CxxSTGEN member to reflect the values that you previously specified in the DUIFPMEM member. Do not modify the DATAREXX version of the DUIFPMEM member.<br><br>
+                <b>DUIIGHB</b><br>
+                The DUIIGHB member in the DSIPARM dataset contains initialization statements for the DUIDGHB task. It includes logic to extract initialization values from the CNMSTYLE member. Update the GHB statements in the CNMSTUSR or CxxSTGEN member to reflect the values that you previously specified in the DUIIGHB member. Do not modify the Data REXX version of the DUIIGHB member.<br><br>
+
+                <b>FKXCFG01</b><br>
+                The FKXCFG01 member in the DSIPARM dataset contains configuration information for the AON component.<br>
+                TCP390 policy information was moved from the FKXCFG01 member to the CNMPOLCY member. Move any TCP390 statements in your V1R4FKXCFG01 member to the V6R3CNMPOLCY member. Review your other AON configuration members (for example the EZLCFG01 member and the FKVCFG01 member) andany additional members that you included to find other TCP390 statements. Move all the TCP390 statements to the CNMPOLCY member.<br><br>
+
+             <b>   FLBSYSDA</b><br>
+                The FLBSYSDA member in the DSIPARM dataset is the initialization member for the APPN accounting manager. This member was removed.<br>
+                <b>FLCSAINP</b><br>
+                The FLCSAINP member is obsolete.<br>
+                In V1R4, The FLCSAINP member was the sample initialization file for the Multi System Manager. You can modify and rename the FLCSAINP member to either FLCAINP or another unique name. In V6R3, the FLCAINP member is used to specify the GETTOPO statements that you want to run during Multi System Manager initialization. All other Multi System Manager initialization definitions were migrated to the CNMSTYLE member.<br>
+                For V6R3, use your existing FLCAINP (or other uniquely named member) and make the following updates:<br>
+                1.	If you made changes to initialization definitions (other than GETTOPO statements), migrate the changes to the CNMSTUSR or CxxSTGEN member.<br>
+                2.	Delete the definitions (non-GETTOPO statements) that you migrated to the CNMSTYLE member.<br>
+                3.	Delete any GETTOPOATMxxx statements.<br>
+                4.	Delete any GETTOPOLNMxxx statements.<br>
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg28">
+        <div class="data"><br>
+            <p>
+                5.	Delete any GETTOPONETFxxx statements.<br>
+                6.	Delete any GETTOPONWCPxxx statements.<br>
+                7.	Delete any START_DISCOVERY statements.<br>
+                Refer to IBMZ NetView Installation: Configuring Graphical Components for additional information about the FLCAINP member.<br><br>
+
+                <h4 style="color: blue;"><b>RODM Address Space</b><div class="line"></div></h4><br>	
+                The samples in this section list changes for the RODM address space.<br>
+               <b> EKGLOADP</b><br>
+                EKGLOADP is the sample RODM load procedure JCL. Make the following changes to EKGLOADP:<br>
+                1.	For NetView datasets, ensure your high-level qualifier for system data sets points to NETVIEW. V6R3M0.<br>
+                2.	To set the ROUTE CODE parameter, add the following statement after the COPIES parameter in the PROC statement. When you add this parameter, add a comma after the COPIES=1 parameter.<br><br>
+                <h6>//	ROUTECDE=1</h6>
+                3.	Add the & ROUTECDE variable to the NetView EXEC statement, as shown:<br>
+                <h6>//LOADRODMEXECPGM=EKGLOTLM,<br>
+                    //PARM=('OPERATION=&OPER,LOAD=&LOAD,NAME=&RODMNAME',<br>
+                    //'LISTLEVEL=&LISTL,SEVERITY=&SEVERITY,ROUTECODE=&ROUTECDE')<br></h6>
+                                
+                As are sul to fthe addition of the ROUTECODE parameter, you alsoneed to update the JCL procedure EKGL LOAD to specify & ROUTECDE when calling EKGLOADP.<br>
+                4.	If you are using the RODM component and are migrating from a previous release, remove the following statement from the STEPLIB dataset concatenation:<br>
+                    <h6>As a result of the addition of the ROUTECODE parameter</h6>
+                5.	Add the following DD statement to the STEPLIB dataset concatenation: <br>  
+                <h6>//STEPLIBDDDSN=&SQ1..CNMLINK,DISP=SHR</h6>
+                6.	If you are using the RODM componentand are migrating from a previous release, change the following statement from:<br>
+                <h6>//EKGLUTBDDDSN=&SQ1..SEKGLUTB,DISP=SHR</h6>
+                to
+                <h6>//EKGLUTBDDDSN=&SQ1..CNMSAMP,DISP=SHR</h6>
+                7.	If you are using the RODM componentand are migrating from a previous release, change the following statement from:<br>
+                <h6>//EKGIN2DDDSN=&SQ1..SEKGCAS1,DISP=SHR</h6>
+                to
+                <h6>//EKGIN2DDDSN=&SQ1..SEKGCAS1,DISP=SHR</h6>
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg29">
+        <div class="data"><br>
+            <p> <b>EKGSI101</b><br>
+                EKGSI10 1isused for allocating the RODM log and check point data bases. This sample isused by sample job CNMSJ004.<br>
+                If you allocated RODM check point datasets for fewer than the maximum number of windows supported by RODM and the estimated number of objects that you expect to store in the RODMd at acache exceeds the previous maximum supported number (approximately524, 000objects), consider increasing the size of the RODM check point data bases.<br>
+                
+                <b>EKGXRODM</b><br>
+                EKGXRODM is the RODM start procedure. Make the following changes to EKGX RODM:<br>
+                1.	For NetView datasets, ensure your high-level qualifier for system datasets points to NETVIEW. V6R3M0.<br>
+                2.	For NetView data sets,ensure your high-level qualifier for user-defined data setspoints to NETVIEW. V6R3USER.<br>
+                3.	Add the following ROUTECDE parameter after the SUBSYM parameter:<br>
+                <h6>// SUBSYM=*SUBSYM, **SYMBOLSUBSTITUTIONOPTION<br>
+                    // ROUTECDE=1      **ROUTECODEFORWTO/WTOR<br></h6>
+                4.	Add the & ROUTECDE variable to the STARTEXEC statement, as shown:<br>
+                <h6>//START	EXECPGM=EKGTC000,REGION=0K,TIME=1440,<br>
+                    //PARM='&TYPE,&NAME,&INIT,&CLRSSB,&CUST,&ARM,&SUBSYM,&ROUTECDE'<br>
+                    </h6>
+                5.	If you are using the RODM componentand are migrating from a previous release, replace the following statements in the STEPLIBd ataset concatenation:<br>
+                    <h6>//  DDDSN=&SQ1..SEKGMOD1,DISP=SHRD<br>
+                        //  DDSN=&SQ1..SEKGMOD2,DISP=SHR<br></h6>
+                with 
+                <h6>//	DDDSN=&SQ1..CNMLINK,DISP=SHR</h6>
+                6.	The EKGCUST DD statementhas changed to includea user DSIPARM dataset:   <br>
+                <h6>//EKGCUSTDDDSN=&Q1..CNM01.DSIPARM,DISP=SHR<br>
+                    //	DDDSN=&SQ1..CNMSAMP,DISP=SHR<br>
+                    </h6>   
+                7.	If you are using the RODM component and are migrating from a previous release, change the following statement from:<br>
+                <h6>//EKGLUTBDDDSN=&SQ1..SEKGLUTB,DISP=SHR</h6>
+                to
+                <h6>//EKGLUTBDDDSN=&SQ1..CNMSAMP,DISP=SHR</h6>
+                8.	If you are using the RODM componentand are migrating from a previous release, change the following statement from:<br>
+                <h6>//EKGIN1DDDSN=&SQ1..SEKGSMP1(EKGIN1),DISP=SHR</h6>
+                to 
+                <h6>//EKGIN1DDDSN=&SQ1..CNMSAMP(EKGIN1),DISP=SHR</h6>
+                9.	If you are using the RODM componentand are migrating from a previous release, change the following statement from:<br>
+                    </p>
+       <br><br> </div>
+    </section>
+    <section class="pg30">
+        <div class="data"><br>
+            <p>
+                <h6>//EKGIN2DDDSN=&SQ1..SEKGCAS1,DISP=SHR</h6>
+                to
+                <h6>//EKGIN2DDDSN=&SQ1..CNMSAMP,DISP=SHR</h6>
+                10.	If you have not installed the Language Environment for OS/390 runtime library in LNKLSTxx or PROGxx, be sure the library name in the STEPLIB of EKGXRODM is correctand uncommented. Remove DD statements for PL/IorC/C++ runtime libraries because the selibraries are no longer being used.<br>
+                <h2 style="color: blue;">GMFHS Address Space <div class="line"></div></h2>
+                <b>CNMGMFHS(CNMSJH10)</b><br>
+                CNMGMFHS (CNMSJH10) is the GMFHS start procedure. Make the following changes to CNMGMFHS:<br>
+                1.	For NetView datasets, ensure your high-level qualifier for system datasets points to NETVIEW. V6R3M0.<br>
+                2.	For NetView data sets, ensure your high-level qualifier for user-defined data sets points to NETVIEW. V6R3USER.<br>
+                3.	Add the following ROUTECDE parameter after the SUBSYM parameter:<br>
+                <h6>//  SUBSYM=*SUBSYM,**SYMBOLSUBSTITUTION<br>
+                    //  ROUTECDE=1	**ROUTECODEFORALLWTO'S<br>
+                    </h6>
+                4.Add the & ROUTECDE variable to the STEP1EXEC statement, as shown:<br>
+                    <h6>
+                        //STEP1	EXECPGM=&PROG,REGION=&REG,TIME=1440,<br>
+                        //PARM='&AGGRST,RESWS=&RESWS,DOMAIN=&DOMAIN,ARM=&ARM,SUBSYM=&SUBSYM,*<br>
+                        //	ROUTECDE=&ROUTECDE'<br>
+                    </h6>
+                5.If you are using the RODM componentand are migrating from a previous release, remove the following statement:  <br> 
+                <h6>//STEPLIBDDDSN=&SQ1..SEKGMOD1,DISP=SHR</h6>
+                6.If you are using the RODM component and are migrating from a previous release, change the following statement from:<br>
+                <h6>//EKGLUTBDDDSN=&SQ1..SEKGLUTB,DISP=SHR</h6>
+                to
+                <h6>    //EKGLUTBDDDSN=&SQ1..CNMSAMP,DISP=SHR</h6>
+                <b>CNMSJH12</b><br>
+                CNMSJH12 is the sample GMFHS/SNA Topology Managerdata modelload job. Because of the number of changes, use the new sample job.<br><br>
+                <b>DUIGINIT</b><br>
+                DUIGINIT is the initialization member for GMFHS.It contains the initialization statements for the GMFH Shost main task. These statements are system-controlling constants that are read when GMFHS is initialized. You can use symbols in DUIGINIT if symbolic substitution is enabledony our system. Ensure that the symbols are defined in member IEASYMxx of SYS1. PARMLIB.<br>
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg31">
+        <div class="data"><br>
+            <p>
+                The DOMAIN statement was commente dout in the default DUIGINIT member.The preferred approach is to use the DOMAIN symbolic variable in the GMFHS start procedure (CNMGMFHS). If the default valuesthat are provided in the DUIGINIT member that is supplied by the NetView product are acceptable for your environment, consider using the default DUIGINIT member.<br><br>
+                
+                <h2 style="color: blue;">Event/ Automation Service Address Space<div class="line"></div></h2>
+                	
+                The sample in this section lists changes for the Event/ Automation Service address space.<br>
+                <b>IHSAECDS</b><br>
+                The IHSAECDS member in the SCNMUXCL dataset contains class definition statements that are used by the event receiver task (EVENTRCV) of the Event /Automation Service (E/AS) tomapinbound Event Integration Facility (EIF) events to alertsor to resolve Network Management Vector Transports (NMVTs).<br><br>
+
+                <b>IHSAEVNT</b><br>
+                The IHSAEVNT sample starts the Event/ Automation Service address space. Make the following changes to the IHSAEVNT member in your PROCLIB:<br>
+                1.	Add the following comments:<br>
+                <img src="image6.jpeg"><br><br>
+                    2.	For NetView data sets, ensure your high-level qualifier for system datasets points to NETVIEW. V6R3M0.<br>
+                    3.	Remove the DD statement for the C/C++ runtime library because this library is nolonger used.<br>
+                    4.	Add the following ROUTECDE parameter after the OUTSIZE parameter:<br>
+                    <h6>//	ROUTECDE=1,	**ROUTECODEFORALLWTO'S</h6>
+                    5.	The SCNMUXLK dataset was replaced with the CNMLINK dataset. See Table22 on page53 for an example on how to change the STEPLIBDD statement.<br>
+                    <h6>//STEPLIBDDDSN=NETVIEW.V1R4M0.SCNMUXLK,DISP=SHR</h6>
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg32">
+        <div class="data"><br>
+            <p>Table22. STEP LIBDD statement (continued)<br>
+                Updatedstatement<br>
+                <h6>//STEPLIBDDDSN=NETVIEW.V6R3M0.CNMLINK,DISP=SHR</h6>
+                6.	The SCNMUXMS dataset that was specified on the IHSMSG1DD statement was replaced with the SDUIMSG1 dataset. See Table23 on page54 for an example on how to change the IHSMSG1DD statement.<br>
+                <img src="b6.jpeg">
+                7.	Add the following & ROUTECDE variable after the & OUTSIZE variable:<br>
+                <h6>INITFILE=&INITFILEOUTSIZE=&OUTSIZEROUTECDE=&ROUTECDE</h6>
+                8.	Add the following output datasets:<br>
+                <h6>
+                    //*	EASOUTPUTDATASETS<br>
+                    //IHSN	DDSYSOUT=A<br>
+                    //IHSB	DDSYSOUT=A<br>
+                    ⋮<br>
+                    //IHSNS	DDSYSOUT=A<br>
+                    //IHSBS	DDSYSOUT=A<br>
+                    ⋮<br>
+                    //IHSNSTDDDSYSOUT=A<br>
+                    //IHSBSTDDDSYSOUT=A<br>
+                </h6>
+               <b> IHSAINIT</b><br>
+                The IHSAINIT sample is the initialization file for the Event/ Automation Service. Information was added to this sample to support the confirmed alert and message adapters. The NO START statements are included to prevent the Event/Automation Service from automatically starting the confirmed alert adapter and confirmed message adapter services.<br>
+                <img src="b5.jpeg" >
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg33">
+        <div class="data"><br>
+            <p>
+                <img src="b7.jpeg" ><br><br>
+                <h2 style="color: blue;">Additional Consider ations<div class="line"></div></h2>
+                Consider changes to the following functions:<br>
+                •	“1-Byte ConsoleIDs” on page55<br>
+                •	“BROWSE Facility” on page56<br>
+                •	“Data REXX in Parameter Files” on page56<br>
+                •	“IP Management” on page57<br>
+                •	“Message Logging” on page57<br>
+                •	“NetView Resource Manager” on page57<br>
+                •	“Security Enhancements” on page57<br>
+                •	“System Symbols in Parameter Files” on page58<br>
+                •	“Attribute Data for Unsolicited MVS Messages” on page59<br>
+                •	“UNIX System Services” on page60<br>
+                1-	Byte Console IDs<br>
+                Withz/OSV1R8,supportfor1-byteconsoleIDswasremoved.Becauseofthis,theNetViewprogramnolongersupportstheuseofa1-byteconsoleIDwhendefiningaconsoletotheNetViewprogram.InsteadofusingaconsoleID,usea2-to8-characterconsolename.Forexample,usetheconsolenamewhenreferencing a specific console in the GETCONID, SETCONID, and AUTOTASK commands and in theAUTOTASK.task.CONSOLEstatementintheCNMSTYLEmember.
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg34">
+        <div class="data"><br>
+            <p>
+                <b>BROWSEFacility</b><br>
+                    A new DEFAULTS setting called LB HOURLY controls whether the hourly statistics messages CNM154I, CNM155I, and CNM156I are posted to the network log. In previous releases, these hourly statistics messages were posted to the net work log automatically, with out an option to prevent them from being posted. The default setting for LB HOURLY is NO, as set by the DEFAULTS. LBHOURLY statement in the CNMSTYLE member. To continue receiving these hourly statistics messages in the net work log, add a DEFAULTS. LBHOURLY statement to the CNMSTUSR or CxxSTGEN member and setits value to YES.<br><br>
+                    <b>DataREXXinParameterFiles</b><br>
+                    Data REXX allows for REXX-style logictobe coded in NetView dataset members.For example,Data REXXallows conditional inclusion of files and the assignment of values to parameters based on settings in the CNMSTYLE member.<br><br>
+                    The NetView programuses Data REXX in the following parameter files:<br>
+                    •	AAUPRMLP<br>
+                    •	BNJMBDST<br>
+                    •	CNMCMENT<br>
+                    •	CNMNEWS<br>
+                    •	CNMSCAT2<br>
+                    •	CNMSTASK<br>
+                    •	CNMSTTWR<br>
+                    •	CxxSTGEN<br>
+                    •	CNMSTUSR<br>
+                    •	DSIAMLTD<br>
+                    •	DSICMDU(DataREXXsupport)<br>
+                    •	DSIDMN<br>
+                    •	DSIILGCF<br>
+                    •	DSILUCTD<br>
+                    •	DSIOPF<br>
+                    •	DSIREXCF<br>
+                    •	DSIRSHCF<br>
+                    •	DSIRTTTD<br>
+                    •	DSITBL01<br>
+                    •	DSITCPCF<br>
+                    •	DSIUINIT<br>
+                    •	DSIWBMEM<br>
+                    •	DUIFPMEM<br>
+                    •	DUIIGHB<br>
+                    •	EZLCFG01<br>
+                    •	EZLDSIAO<br>
+                    •	FKVCFG01<br>
+                    •	FKVISTAO<br>
+                    •	FKVTABLE<br>
+                    •	FLBAUT<br>
+                    •	HELPMAP(CNMS1048)<br>
+
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg35">
+        <div class="data"><br>
+            <p>
+                <b>IPManagement</b><br>
+                Most of the IP management functions that are available under the AON TCP subtower have also beenmade available under either the base NetView program (for example, Ping and Tracerte) or the new IP Management (IPMGT) tower. This change no longer requires you to configure the AON component inorder to access these IP management functions. However, because the AON TCP subtower and the IPMGT tower are mutually exclusive, you must decide whether to use the IPMGT tower or the AON TCP sub tower in order touse these IP management functions. To help with this decision, review the following list of IP management functions that are not available under either the base NetView program or the IPMGT tower:<br>
+                •	IPservermanagement(forUNIXCommandServerandTSOCommandServer)<br>
+                •	Issue TSO and UNIX commands (for UNIX Command Server and TSO Command Server)<br>
+                •	SNMP VIEW<br>
+                •	NetView 6000 support<br>
+                •	CISCOWorksBluefunction<br>
+                 Additionally, the following functions have changed:<br>
+                •	ACTMON<br>
+                •	IPtracing<br>
+                •	IPMAN<br>
+                •	IPSTAT<br>
+                •	Ping<br>
+                •	Tracerte<br>
+                <b>MessageLogging</b><br>
+                Starting with NetView for z /OSV6R1, a new logging facility named Can zlog is required to be present for successful automation of system messages. This facility is enabled by using a data space which is, by default, defined with 2GB of virtual storage, and is allocated to the Master Scheduler address space. For more information about defining this data space, see the Installation: Getting Started manual.<br>
+                Warning: Proper planning for real and auxiliary storage must be performed before enabling the Can zlog data space,as system slow down and hangs can occur with in sufficient storage.<br>
+               <b> NetViewResourceManager</b><br>
+                As a result of beingable to customize the NetView Resource Managerau to task, forwarding status from ahost at the V5R2 or later level to a manager host on a previous release works only if the NetView Resource Managerau to task is AUTONRM. However, you can continue to forward status from ahostat the V1R4 level to a manager at the V5R2 or later level. There is no restriction on the NetView Resource Managerau to task name in V5R2or later for the upward migration to work.<br>
+                <b>Security Enhancements</b><br>
+                The following security enhancements have been made:<br>
+                •	Support for mixed-case passwords and password phrases<br>
+                •	User-defined command authorization table:<br>
+                With NetView V6.2.1 APAR OA48179, a sample command authorization table named CNMSCATU is provided in the DSIPARM data set. This sample is included by DSIPARM member CNMSCAT2 and is intended for user command authorization table entries. When using CNMSCATU, review and make any necessary modifications to CNMSCAT2, while considering the following rules:<br>
+                –	If you have more than one PROTECT statement that describes the same command, keyword and value, the first statement is used and all others are ignored.<br>
+                –	More than one PERMIT statement can be specified for the same comman did entifier.<br>
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg36">
+        <div class="data"><br>
+            <p>
+            –	As of NetView V6.3, a sample IBMZ System Automation command authorization table named INGCAT1 is included if the SA. SYSOPS tower and sub tower are enabled.<br>
+            For more information, see IBMZ NetView Security Reference.<br><br>
+            <b>Mixed Case Passwords</b><br>
+            If youu sean SAF product for password checking, you mightbeable touse the mixed case password function. For more information, see IBMZ NetView Security Reference.<br>
+            <b>PasswordPhrases</b><br>
+            The NetView program provides support for password phrase authorization. A password phrase can beused as a substitute for a password for all NetView functions that usean SAF product, such as RACF,for security checking. Any panel that accepts passwords was updated to accept password phrases. The password phrase can include phrases from 9-100 characters in length.<br>
+            The RACF product allows password phrases to contain any valid EBCDIC characters. When setting apassword phrase for a user ID that will be accessed from a non-z/OS system, the password on that system is enteredas ASCII text. Not all EBCDIC characters havean ASCII equivalent, so limit the EBCDIC password phrase to characters that havean ASCII equivalent.<br>
+            Password phrases are not supported in the following environments:<br>
+            •	Password checking using the DSIOPF member<br>
+            •	Log on validation using the DSIEX12 installation exit<br>
+            •	Tivoli Enterprise Portal login. Because of this restriction, the password phrase cannot be passed to the Tivoli Enterprise Monitoring Server for RACF verification.<br>
+            •	Functions that use the NetView-NetView task (NNT)<br><br>
+            <b>System Symbols in Parameter Files</b><br>
+            The NetView programuses the MVS system symbolslisted in Table24 on page58. The system symbols are defined in the SYS1. PARMLIB dataset for the following members of the DSIPARM dataset:<br>
+            •	CNMSTYLE<br>
+            •	DUIGINIT<br>
+            •	FLBSYSD<br>
+            <img src="b1.jpeg" alt="">
+            & DOMAIN is a Net View symbol that isused in the following parameter files and is defined only with in the NetView address space:<br>
+            •	CNMSCBET<br>
+            •	CNMSMRT1<br>
+            •	CNMSTASK<br>
+            •	CNMSTGEN<br>
+            •	CNMSTPWD<br>
+            •	CNMSTUSR<br>
+            •	CNMSTYLE<br>
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg37">
+        <div class="data"><br>
+            <p>
+                •	DSIAMIAT<br>
+                •	DSIAMII<br>
+                •	DSITBL01<br>
+                •	DSIVPARM<br>
+                •	FKXWHTML<br>
+                •	FLBSYSD<br>
+                <b>Attribute Data for Unsolicited MVS Messages</b><br>
+                Starting with V6R1, the NetView program receives unsolicited MVS messages only through the sub system interface. Some data that was available by usinga value of SYSTEMf or MSGIFAC is no longer available.<br>
+                Some message facilities (see Table25 on page59) depend on vectors in the Message Data Block (MDB). The MDB is not available for unsolicited MVS messages in NetView V6R1 or later. For this reason, the data facilities that are shown in Table25 on page59 return no value when used for unsolicited messages.<br><br>
+                    <img src="b2.jpeg" alt="">
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg38">
+        <div class="data"><br>
+            <p><img src="b3.jpeg" alt="">
+                <b>UNIX System Services</b><br>
+                The following section describes the directories, configuration files, and functions that have changed from NetView V1R4 to NetView V6R3. Also review the section in “Preparing UNIX System Services” on page14.<br>
+                The Net View MIB collection was moved fromthe/usr/lpp/net view/mibs /directory to the /usr/lpp/netview/v6r3/mibs/directory.<br>
+                The following configuration files found in NetView V1R4 are no longer used in NetView V6R3:<br>
+                •	/etc/netview/fkxcm¹<br>
+                •	/etc/netview/ipdiscovery.conf<br>
+                •	/etc/netview/nv390mibs.def<br>
+                •	/etc/netview/nv390srvc.conf<br>
+                •	/etc/netview/snmp.conf<br>
+                •	/var/netview/properties/JdnServerProperties.txt<br>
+                •	/var/netview/properties/startup/config.properties<br>
+                •	/var/netview/properties/startup/node.def<br>
+
+            </p>
+       <br><br> </div>
+    </section>
+    <section class="pg39">
+        <div class="data"><br>
+            <p>
+                •	/var/netview/properties/startup/pollobj.def<br>
+                •	/var/netview/properties/startup/resource.def<br>
+                •	/var/netview/properties/startup/template.def<br>
+                •	/var/netview/properties/startup/view.def<br>
+                <b>Usagenote:</b><br>
+                1.	Copy any non- duplicate community names from fkxcm in to DSIPARM member CNMSCM.<br>
+                The webre sources files that are used by the Web Services Gateway function are located in the following directory:<br>
+                <h6>/usr/lpp/netview/v6r3/www/</h6><br>
+                See IBMZ NetView Installation: Configuring Additional Components to update the files for your environment. The WSDL files automatically generate aproxy- client connection.<br>
+                                <img src="b4.jpeg"><br><br>
+                The following functions are no longer available on UNIX System Services for NetView V6R3:<br>
+                •	The TCP/IP discovery sample which previouslyran on z/OS and OS /390 in UNIX System Services.<br>
+                 You can download this sample from the IBMZ NetView web page (http://www.ibm.com/software/tivoli/products/netview-zos/). It is replaced in the product by the TCP/ IPd is covery function for LinuxonZ.<br>
+                •	The- jsnmpo ption of the NVSNMP command<br>
+                •	Java™ Application Server(JAS)<br>
+                The Java Application Server provided for starting, stopping, and checking the status of the following servicesinanz/ OSUNIX System Services environment:<br>
+                –	SNMPSRVC<br>
+                –	POLLSRVC<br>
+                –	MIBSRVC<br>
+                –	LOADMIB<br>
+            </p>
+       <br><br> </div>
+    </section>
+</body>
+</html>
